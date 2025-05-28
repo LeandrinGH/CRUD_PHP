@@ -1,23 +1,22 @@
 <?php
-require_once __DIR__ . "/../db_config.php";
 
-class Cliente {
-    private $conn;
-    private $table = "clientes";
+class Client {
+    public $nombre;
+    public $direccion;
+    public $telefono;
+    public $email;
 
-    public function __construct() {
-        $database = new Database();
-        $this->conn = $database->conectar();
+    public function __construct($nombre, $direccion, $telefono, $email) {
+        $this->nombre = $nombre;
+        $this->direccion = $direccion;
+        $this->telefono = $telefono;
+        $this->email = $email;
     }
 
-    public function crearCliente($nombre, $direccion, $telefono, $email) {
-        $sql = "INSERT INTO " . $this->table . " (nombre, direccion, telefono, email) VALUES (:nombre, :direccion, :telefono, :email)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":nombre", $nombre);
-        $stmt->bindParam(":direccion", $direccion);
-        $stmt->bindParam(":telefono", $telefono);
-        $stmt->bindParam(":email", $email);
-        return $stmt->execute();
-    }
+    // public function checkValues() {
+    //     return !empty($this->nombre) && !empty($this->direccion) && 
+    //        !empty($this->telefono) && filter_var($this->email, FILTER_VALIDATE_EMAIL);
+
+    // }
 }
 ?>
