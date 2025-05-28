@@ -14,8 +14,7 @@
     </form>
 
     <?php
-    require_once __DIR__ . '/db_config.php';
-    require_once __DIR__ . '/Model/Client.php';
+    require_once __DIR__ . '/Controller/ClientController.php';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nombre = $_POST['nombre'];
@@ -23,8 +22,8 @@
         $telefono = $_POST['telefono'];
         $email = $_POST['email'];
 
-        $cliente = new Cliente();
-        if ($cliente->crearCliente($nombre, $direccion, $telefono, $email)) {
+        $cliente = new ClienteControlador();
+        if ($cliente->agregarCliente($nombre, $direccion, $telefono, $email)) {
             echo "<script>alert('Cliente registrado correctamente!'); window.location.href='index.php';</script>";
         } else {
             echo "<script>alert('Error al registrar cliente.'); window.location.href='index.php';</script>";
