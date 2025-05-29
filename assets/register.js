@@ -1,17 +1,84 @@
-document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("clientForm").addEventListener("submit", function(event){
-        event.preventDefault();
+document.getElementById("clientForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    saveClient();
+})
 
-        let formData = new FormData(this);
+document.addEventListener("DOMContentLoaded", getClients);
 
-        fetch("../Controller/ClientController.php",{
-            method: "POST",
-            body: formData
+function saveClient(){
+    const form = document.getElementById("clientForm");
+
+    let formData = new FormData(form);
+    const data = {};
+
+    formData.forEach((value, key) => { data[key] = value; });
+
+    fetch("../Controller/ClientController.php",{
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {response.json();
+        console.log(response);
+    })
+    .then(responseData => {
+        alert(responseData.message);
+        
+        if (responseData.status === 'success'){
+            form.reset();
+            getClients();
+        }
+    })
+    .catch(error => console.error("Error: ", error));
+}
+
+function getClients() {
+    fetch("../Controller/ClientController.php", { method: "GET" })
+    .then(response => response.json())
+    .then(data => {
+        let table = document.getElementById("ClientsTable");
+        table.innerHTML = "";
+        if (!data || data.length === 0) {
+            console.warn("No hay clientes registrados.");
+            return;
+        }
+
+        data.forEach(client => {
+            let row = `<tr>
+                <td>${client.id}</td>
+                <td>${client.nombre}</td>
+                <td>${client.direccion}</td>
+                <td>${client.telefono}</td>
+                <td>${client.email}</td>
+                <td>
+                    <button onclick="updateClient(${client.id})">Editar</button>
+                    <button onclick="deleteClient(${client.id})">Eliminar</button>
+                </td>
+                    </tr>`;
+            table.innerHTML += row;
+        });
+    })
+    .catch(error => console.error("Error: ", error));
+}
+
+function updateClient(id) {
+    let nombre = prompt("Nuevo nombre: ");
+    let direccion = prompt("Nueva dirección:");
+    let telefono = prompt("Nuevo teléfono:");
+    let email = prompt("Nuevo email:");
+    if (nombre && direccion && telefono && email) {
+        fetch("../Controller/EditClient.php", {
+            method: "PUT",
+            body: JSON.stringify({ id, nombre, direccion, telefono, email }),
+            headers: { "Content-Type": "application/json" }
         })
         .then(response => response.json())
         .then(data => {
             alert(data.message);
+            getClients(); // Refrescar la tabla
         })
-        .catch(error => console.error("Error: ", error));
-    })
-})
+        .catch(error => console.error("Error:", error));
+    }
+}

@@ -26,5 +26,24 @@ class ClientConnection {
             return false;
         }
     }
+
+    public function getClients() {
+        $sql = "SELECT * from " . $this->table;
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateClient($client) {
+        $sql = "UPDATE " . $this->table . " SET nombre = :nombre, direccion = :direccion, telefono = :telefono, email = :email WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $data["id"]);
+        $stmt->bindParam(":nombre", $data["nombre"]);
+        $stmt->bindParam(":direccion", $data["direccion"]);
+        $stmt->bindParam(":telefono", $data["telefono"]);
+        $stmt->bindParam(":email", $data["email"]);
+        return $stmt->execute();
+
+    }
 }
 ?>
