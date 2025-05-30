@@ -5,7 +5,14 @@
 
 </head>
 <body>
-    <h2>Registrar Cliente</h2>
+<?php
+/** 
+ * Template Name: Registros de Clientes 
+*/
+require_once('./../../../../../../wp-load.php');
+get_header();
+?>
+<h2>Registrar Cliente</h2>
     <form id="clientForm">
         <input type="text" name="nombre" placeholder="Nombre" required>
         <input type="text" name="direccion" placeholder="Dirección" required>
@@ -29,5 +36,8 @@
         <tbody id="ClientsTable"></tbody>
     </table>
     <script src="../assets/register.js"></script>
+    <?php
+    get_footer();
+    ?>
 </body>
 </html>
