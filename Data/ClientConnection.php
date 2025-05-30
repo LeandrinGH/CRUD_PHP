@@ -34,16 +34,27 @@ class ClientConnection {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function updateClient($client) {
-        $sql = "UPDATE " . $this->table . " SET nombre = :nombre, direccion = :direccion, telefono = :telefono, email = :email WHERE id = :id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":id", $data["id"]);
-        $stmt->bindParam(":nombre", $data["nombre"]);
-        $stmt->bindParam(":direccion", $data["direccion"]);
-        $stmt->bindParam(":telefono", $data["telefono"]);
-        $stmt->bindParam(":email", $data["email"]);
-        return $stmt->execute();
+    public function updateClient($client, $id) {
+        try {
+            $sql = "UPDATE " . $this->table . " SET nombre = :nombre, direccion = :direccion, telefono = :telefono, email = :email WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":id", $id);
+            $stmt->bindParam(":nombre", $client->nombre);
+            $stmt->bindParam(":direccion", $client->direccion);
+            $stmt->bindParam(":telefono", $client->telefono);
+            $stmt->bindParam(":email", $client->email);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error de base de datos: " . $e->getMessage());
+            echo json_encode(["message" => "Error al registrar cliente"]);
+            return false;
+        }
+    }
 
+    public function deleteClient($id) {
+        $sql = "DELETE FROM " . $this->table . " WHERE id = " . $id;
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute();
     }
 }
 ?>

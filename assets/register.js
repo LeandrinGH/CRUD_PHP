@@ -20,10 +20,9 @@ function saveClient(){
         },
         body: JSON.stringify(data)
     })
-    .then(response => {response.json();
-        console.log(response);
-    })
+    .then(response => response.json())
     .then(responseData => {
+        console.log(responseData);
         alert(responseData.message);
         
         if (responseData.status === 'success'){
@@ -56,7 +55,7 @@ function getClients() {
                     <button onclick="updateClient(${client.id})">Editar</button>
                     <button onclick="deleteClient(${client.id})">Eliminar</button>
                 </td>
-                    </tr>`;
+                </tr>`;
             table.innerHTML += row;
         });
     })
@@ -69,7 +68,7 @@ function updateClient(id) {
     let telefono = prompt("Nuevo teléfono:");
     let email = prompt("Nuevo email:");
     if (nombre && direccion && telefono && email) {
-        fetch("../Controller/EditClient.php", {
+        fetch("../Controller/ClientController.php", {
             method: "PUT",
             body: JSON.stringify({ id, nombre, direccion, telefono, email }),
             headers: { "Content-Type": "application/json" }
@@ -81,4 +80,18 @@ function updateClient(id) {
         })
         .catch(error => console.error("Error:", error));
     }
+}
+
+function deleteClient(id) {
+    fetch("../Controller/ClientController.php", {
+        method: "DELETE",
+        body: JSON.stringify({id}),
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        getClients();
+    })
+    .catch(error => console.error("Error: ", error));
 }
