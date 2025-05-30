@@ -95,3 +95,21 @@ function deleteClient(id) {
     })
     .catch(error => console.error("Error: ", error));
 }
+
+function buscarClientes() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let rows = document.querySelectorAll("#ClientsTable tr");
+
+    rows.forEach(row => {
+        let nombre = row.cells[1].textContent.toLowerCase(); // Columna de nombre
+        let direccion = row.cells[2].textContent.toLowerCase();
+        let telefono = row.cells[3].textContent.toLowerCase();
+        let email = row.cells[4].textContent.toLowerCase();
+
+        if (nombre.includes(input) || direccion.includes(input) || telefono.includes(input) || email.includes(input)) {
+            row.style.display = ""; // Mostrar fila si hay coincidencia
+        } else {
+            row.style.display = "none"; // Ocultar fila si no coincide
+        }
+    });
+}

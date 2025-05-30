@@ -13,6 +13,8 @@
         <input type="email" name="email" placeholder="Correo electrónico" required>
         <button type="submit">Registrar Cliente</button>
     </form>
+    <br></br>
+    <input type="text" id="searchInput" placeholder="Buscar clientes..." onkeyup="buscarClientes()">
     <table border="1">
         <thead>
             <tr>
