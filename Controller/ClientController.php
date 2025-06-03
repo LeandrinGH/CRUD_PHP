@@ -1,8 +1,11 @@
 <?php
 require_once __DIR__ . "/../Model/Client.php";
 require_once __DIR__ . "/../Data/ClientConnection.php";
+require_once __DIR__ . "/../Data/ConnectionInterface.php";
+
 header('Content-Type: application/json');
 $connection = new ClientConnection();
+$otherConnection = new ConnectionInterface();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json_data = file_get_contents('php://input');
@@ -24,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $client = new Client($nombre, $direccion, $telefono, $email);
 
-        if ($connection->addClient($client)) {
+        if ($otherConnection->add($client)) {
             $response = ["message" => "Cliente registrado correctamente", "status" => "success"];
         } else {
             $response = ["message" => "Error al registrar cliente", "status" => "error"];
