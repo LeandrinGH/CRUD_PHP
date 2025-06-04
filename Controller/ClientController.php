@@ -38,7 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    echo json_encode($otherConnection->get("clientes"));
+    //echo json_encode($otherConnection->get("clientes"));
+    echo json_encode($connection->getClients());
     exit;
 }
 

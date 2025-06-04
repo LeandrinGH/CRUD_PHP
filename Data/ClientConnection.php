@@ -28,10 +28,16 @@ class ClientConnection {
     }
 
     public function getClients() {
-        $sql = "SELECT * from " . $this->table;
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $url = "http://localhost:8081/api/client/all";
+        $response = file_get_contents($url);
+        if ($response === FALSE) {
+            return [];
+        }
+
+        $data = json_decode($response, true);
+        
+        return $data;
     }
 
     public function updateClient($client, $id) {
