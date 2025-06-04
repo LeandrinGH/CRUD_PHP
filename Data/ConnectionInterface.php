@@ -26,16 +26,34 @@ class ConnectionInterface {
         }
     }
 
-    public function update() {
-        
+    public function update($table, $entity, $id) {
+        try {
+            $entityArray = get_object_vars($entity);
+            $set = implode(', ', array_map(function($col) {return "$col = ?";},
+            array_keys($entityArray)));
+            $sql = "UPDATE $table SET $set WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $values = array_values($entityArray);
+            $values[] = $id;
+            return $stmt->execute($values);
+        } catch (PDOException $e) {
+            error_log("Error de base de datos: " . $e->getMessage());
+            echo json_encode(["message" => "Error al registrar cliente"]);
+            return false;
+        }
     }
 
-    public function delete() {
-        
+    public function delete($table, $id) {
+        $sql = "DELETE FROM " . $table . " WHERE id = " . $id;
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute();
     }
 
-    public function get() {
-        
+    public function get($table) {
+        $sql = "SELECT * from " . $table;
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

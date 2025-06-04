@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    echo json_encode($connection->getClients());
+    echo json_encode($otherConnection->get("clientes"));
     exit;
 }
 
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "PUT") {
 
         $client = new Client($nombre, $direccion, $telefono, $email);
 
-        if ($connection->updateClient($client, $data['id'])) {
+        if ($otherConnection->update("clientes", $client, $data['id'])) {
             $response = ["message" => "Cliente actualizado correctamente", "status" => "success"];
         } else {
             $response = ["message" => "Error al actualizar cliente", "status" => "error"];
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
         $response['message'] = 'Error al decodificar los datos JSON: ' . json_last_error_msg();
     }
     else {
-        if ($connection->deleteClient($data['id'])) {
+        if ($otherConnection->delete("clientes", $data['id'])) {
             $response = ["message" => "Cliente eliminado correctamente", "status" => "success"];
         } else {
             $response = ["message" => "Error al eliminar cliente", "status" => "error"];
