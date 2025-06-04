@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $client = new Client($nombre, $direccion, $telefono, $email);
 
-        if ($otherConnection->add($client)) {
+        if ($otherConnection->add($client, "clientes")) {
             $response = ["message" => "Cliente registrado correctamente", "status" => "success"];
         } else {
             $response = ["message" => "Error al registrar cliente", "status" => "error"];
